@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PlayerRepository")
  */
 class Player
 {

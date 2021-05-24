@@ -5,7 +5,7 @@ import { HydraAdmin } from "@api-platform/admin";
 import Home from "./pages/Home";
 import {AppLayout} from "./Layout";
 
-import '@fontsource/roboto'
+import "@fontsource/roboto"
 
 function App() {
   if(typeof window !== "undefined")
