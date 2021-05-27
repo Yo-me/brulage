@@ -13,7 +13,7 @@ import {
     Button
 } from '@material-ui/core';
 
-import AppMenu from "./components/menu";
+import AppMenu from "./menu";
 
 const axios = require('axios');
 
