@@ -55,12 +55,12 @@ export class Home extends React.Component
                 return (
                     <Card>
                         <CardContent>
-                            <Grid container spacing="2" direction="column">
+                            <Grid container spacing={2} direction="column">
                                 {this.state.teams.map((team) => {
                                     return(
                                         <Grid item>
                                             <Card>
-                                                <CardHeader title={"Equipe " + team.number} />
+                                                <CardHeader title={"Equipe " + team.number} subheader={team.division.name}/>
                                                 <CardContent>
                                                     <Team team={team} />
                                                 </CardContent>

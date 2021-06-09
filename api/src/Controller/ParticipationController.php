@@ -5,16 +5,32 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\SerializerInterface;
 
-use App\Entity\Player;
+use App\Entity\Participation;
 use Doctrine\ORM\EntityManagerInterface;
 
-class PlayerController extends AbstractController
+class ParticipationController extends AbstractController
 {
-    /**
-     * @Route("/importPlayers", name="app_lucky_number")
-     */
-    function importPlayers()
+    public function __invoke(SerializerInterface $serializer, $teamId, $gamedayId)
+    {
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityRepository = $entityManager->getRepository(Participation::class);
+        
+        $participations = $entityRepository->findByTeamAndGameday($teamId, $gamedayId);
+
+        //$controllerResponse = new Response(
+        //    $serializer->serialize($participations, 'json'),
+        //    Response::HTTP_OK,
+        //    ['content-type' => 'appication/json']
+        //);
+
+        return $participations;
+    }
+
+    /*
+    function importParticipations()
     {
         $client = HttpClient::create();
         $currentDate = new \DateTime('now');
@@ -38,23 +54,25 @@ class PlayerController extends AbstractController
 
         if($statusCode == 200)
         {
+            //echo($response->getContent());
             $entityManager = $this->getDoctrine()->getManager();
-            $entityRepository = $entityManager->getRepository(Player::class);
+            $entityRepository = $entityManager->getRepository(Participation::class);
 
-            $players = new \SimpleXMLElement($response->getContent());
+            $participations = new \SimpleXMLElement($response->getContent());
             $response_text = "";
-            foreach($players->joueur as $player)
+            //$response_text = $participations->joueur[0]->asXML();
+            foreach($participations->joueur as $participation)
             {
-                $p = $entityRepository->findByLicenceNum($player->licence);
+                $p = $entityRepository->findByLicenceNum($participation->licence);
 
                 if(\count($p) == 0)
                 {
-                    $newPlayer = new Player();
-                    $newPlayer->setFirstname($player->prenom);
-                    $newPlayer->setLastname($player->nom);
-                    $newPlayer->setLicenceNum($player->licence);
+                    $newParticipation = new Participation();
+                    $newParticipation->setFirstname($participation->prenom);
+                    $newParticipation->setLastname($participation->nom);
+                    $newParticipation->setLicenceNum($participation->licence);
 
-                    $entityManager->persist($newPlayer);
+                    $entityManager->persist($newParticipation);
                 }
             }
             $entityManager->flush();
@@ -75,5 +93,6 @@ class PlayerController extends AbstractController
             );
         }
     }
+    */
 }
 ?>

@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\PlayerRepository")
@@ -15,21 +15,25 @@ class Player
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"player_visibility"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"player_visibility"})
      */
     private $firstname;
-
+    
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"player_visibility"})
      */
     private $lastname;
-
+    
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"player_visibility"})
      */
     private $licenceNum;
 

@@ -4,7 +4,11 @@ import {
     Grid,
     Card,
     CardHeader,
+    CircularProgress,
+    Container
 } from '@material-ui/core'
+
+import { Gameday } from "./Gameday"
 
 const axios = require('axios');
 
@@ -17,20 +21,7 @@ export class Team extends React.Component {
             gamedays: [],
             error: null,
             id: null,
-            team: ""
-        }
-
-        if(props.team)
-        {
-            this.setState({
-                team: props.team
-            });
-        }
-        else
-        {
-            this.setState({
-                error: "Team component must be given a team"
-            });
+            team: props.team
         }
     }
 
@@ -56,20 +47,24 @@ export class Team extends React.Component {
             if(this.state.gamedaysLoaded)
             {
                 return (
-                    <Grid container item direction="row" wrap="wrap" spacing="1">
+                    <Grid container direction="row" wrap="wrap" spacing={1} alignItems="stretch" >
                         {this.state.gamedays.map((gameday) => {
                             return (
-                                <Grid item sm="2">
-                                    <Card variant="outlined">
-                                        <CardHeader title={"Journée " + gameday.number} subheader={new Date(gameday.date).toLocaleDateString ()}></CardHeader>
-                                    </Card>
+                                <Grid item key={gameday.id} xs={2}>
+                                    <Gameday  gameday={gameday} team={this.state.team}/>
                                 </Grid>);
                         })}
                     </Grid>);
             }
             else
             {
-                return <p>Loading</p>;
+                return (
+                    <Grid container direction="row" wrap="wrap" spacing={1}>
+                        <Grid item>
+                            <CircularProgress />
+                        </Grid>
+                    </Grid>
+                );
             }
         }
     }

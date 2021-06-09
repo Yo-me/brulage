@@ -66,7 +66,7 @@ class TeamsMenu extends React.Component
             elements={this.state.teams.map((team) => {
                 return {
                     text: "Equipe " + team.number,
-                    link: "#/"
+                    link: "#/teamEdit/" + team.number
                 };
             })}
             title="Mes Equipes"

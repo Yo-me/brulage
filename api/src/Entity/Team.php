@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      normalizationContext={"groups"={"division_visibility"}}
+ * )
  * @ORM\Entity
  */
 class Team
@@ -14,11 +17,13 @@ class Team
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
+     * @Groups({"division_visibility"})
      */
     private $number;
-
+    
     /**
      * @ORM\ManyToOne(targetEntity="Division")
+     * @Groups({"division_visibility"})
      */
     public $division;
 
