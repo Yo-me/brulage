@@ -8,6 +8,11 @@ import {
     CardContent,
     CardHeader,
 } from '@material-ui/core'
+
+import {
+    DragDropContext
+} from 'react-beautiful-dnd'
+
 import { fade, withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -43,6 +48,23 @@ class TeamEdit extends React.Component
         });
     }
 
+    onDragEnd = (result) => {
+        const { source, destination } = result;
+        
+        if (!destination) {
+            return;
+        }
+        // the only one that is required
+    };
+
+    onDragStart = (result) => {
+        console.log("drag started");
+    }
+
+    onDragUpdate = (result) => {
+        console.log("grad updated");
+    }
+
     render()
     {
         
@@ -65,19 +87,21 @@ class TeamEdit extends React.Component
         }
         
         return (
-            <Card>
-                {titleContent}
-                <CardContent>
-                    <Grid container direction="row" wrap="nowrap" alignItems="stretch" style={{height:"100%", padding:"8px"}} spacing={4}>
-                        <Grid item xs={2}>
-                            <PlayerList />
+            <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart} onDragUpdate={this.onDragUpdate}>
+                <Card>
+                    {titleContent}
+                    <CardContent>
+                        <Grid container direction="row" wrap="nowrap" alignItems="stretch" style={{height:"100%", padding:"8px"}} spacing={4}>
+                            <Grid item xs={2}>
+                                <PlayerList />
+                            </Grid>
+                            <Grid item xs>
+                                {teamContent}
+                            </Grid>
                         </Grid>
-                        <Grid item xs>
-                            {teamContent}
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
+                    </CardContent>
+                </Card>
+            </DragDropContext>
         );
     }
 }

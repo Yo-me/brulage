@@ -12,7 +12,13 @@ import {
 import { fade, withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 
+import {
+    Droppable,
+    Draggable
+} from 'react-beautiful-dnd'
+
 const axios = require('axios');
+
 
 const styles = theme => ({
     grow: {
@@ -59,6 +65,15 @@ const styles = theme => ({
         border: `2px solid ${theme.palette.primary.main}`,
         boxSizing: 'border-box',
         borderRadius: `0px 0px ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px`,
+    },
+    listItem: {
+
+    },
+    listItemClone: {
+        "& ~ li": {
+            //display: "none!important"
+            transform: "none!important"
+        }
     },
     searchBar: {
         width: "100%",
@@ -128,11 +143,28 @@ class PlayerList extends React.Component {
 
                     return false;
                 }
-            }).map((player) => {
+            }).map((player, index) => {
                 return (
-                    <ListItem key={player.licenceNum}>
-                        <Chip color="primary" label={player.firstname + " " + player.lastname}/>
-                    </ListItem>)
+                    <Draggable draggableId={player.licenceNum} key={player.licenceNum} index={index}>
+                            {(provided, snapshot) =>(
+                                <>
+                                    <ListItem className={this.props.classes.listItem} ref={provided.innerRef} 
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                style={
+                                                        provided.draggableProps.style
+                                                    }
+                                                key={player.licenceNum}>
+                                        <Chip color="primary" label={player.firstname + " " + player.lastname}/>
+                                    </ListItem>
+                                    {snapshot.isDragging && (
+                                        <ListItem className={this.props.classes.listItemClone}>
+                                                <Chip  color="primary" label={player.firstname + " " + player.lastname}/>
+                                        </ListItem>
+                                    )}
+                                </>
+                            )}
+                    </Draggable>)
             });
         }
         return (
@@ -151,9 +183,15 @@ class PlayerList extends React.Component {
                     </div>
                 </Box>
                 <div className={"MuiPaper-elevation2 " + this.props.classes.listContainer}>
-                    <List>
-                        {playerContent}
-                    </List>
+                    <Droppable droppableId="PlayerList" isDropDisabled={true}>
+                        {(provided, snapshot) => (
+                            <List ref={provided.innerRef}
+                                  {...provided.droppableProps}
+                            >
+                                {playerContent}
+                            </List>
+                        )}
+                    </Droppable>
                 </div>
             </>);
     }
