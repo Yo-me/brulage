@@ -13,9 +13,6 @@ import {
     DragDropContext
 } from 'react-beautiful-dnd'
 
-import { fade, withStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-
 import {Team} from '../components/Team';
 import PlayerList from '../components/PlayerList';
 const axios = require('axios');
@@ -48,22 +45,17 @@ class TeamEdit extends React.Component
         });
     }
 
-    onDragEnd = (result) => {
-        const { source, destination } = result;
+    onDragEnd = (result, provided) => {
+        const { draggableId, source, destination } = result;
         
         if (!destination) {
             return;
         }
-        // the only one that is required
+        
+        console.log(source);
+        console.log(destination);
+        console.log(draggableId);
     };
-
-    onDragStart = (result) => {
-        console.log("drag started");
-    }
-
-    onDragUpdate = (result) => {
-        console.log("grad updated");
-    }
 
     render()
     {

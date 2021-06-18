@@ -5,13 +5,27 @@ import {
     CardHeader,
     CardContent,
     CircularProgress,
-    Chip
+    Chip,
+    List,
+    ListItem
 } from '@material-ui/core';
 
+import {
+    Droppable,
+    Draggable
+} from 'react-beautiful-dnd'
+
+import { withStyles } from '@material-ui/core/styles';
 
 const axios = require('axios');
 
-export class Gameday extends React.Component {
+const styles = theme => ({
+    hovered: {
+        border: `3px solid ${theme.palette.primary.main}`
+    }
+})
+
+class Gameday extends React.Component {
 
     constructor(props) {
         super(props)
@@ -54,41 +68,52 @@ export class Gameday extends React.Component {
             );
         }
         else {
-            let content = null;
-            if(!this.state.isLoaded)
-            {
-                content = (
-                    <Grid container justify="center" spacing={0}>
-                        <Grid item>
-                            <CircularProgress />
-                        </Grid>
-                    </Grid>
-                );
-            }
-            else
-            {
-                content = (
-                    <Grid container direction="column" spacing={1}>
-                        {
-                            this.state.players.map((player) => {
-                                return (
-                                    <Grid item key={player.licenceNum}><Chip color="primary" label={player.firstname + " " + player.lastname}/></Grid>
-                                );
-                            })
-                        }
-                    </Grid>
-                );
-            }
-
             return (
-                <Card variant="outlined" style={{height: "100%"}}>
-                    <CardHeader title={"Journée " + this.state.gameday.number} subheader={new Date(this.state.gameday.date).toLocaleDateString ()}></CardHeader>
-                    <CardContent>
-                        {content}
-                    </CardContent>
-                </Card>
+                <Droppable key={this.props.gameday.id+","+this.props.team.number} droppableId={this.props.gameday.id + "," + this.props.team.number} isDropDisabled={false} >
+                    {(provided, snapshot) => (
+                        <Card variant="outlined" className={snapshot.isDraggingOver ? this.props.classes.hovered : "" }>
+                            <CardHeader title={"Journée " + this.state.gameday.number} subheader={new Date(this.state.gameday.date).toLocaleDateString ()}></CardHeader>
+                            <CardContent>
+                                {!this.state.isLoaded && (
+                                    <Grid container justify="center" spacing={0}>
+                                        <Grid item>
+                                            <CircularProgress />
+                                        </Grid>
+                                    </Grid>
+                                )}
+                                {this.state.isLoaded && (
+                                    <List {...provided.droppableProps} 
+                                        ref={provided.innerRef} >
+                                        {
+                                            this.state.players.map((player, index) => {
+                                                return (
+                                                    <Draggable draggableId={player.licenceNum+"gameday"} index={index} key={player.licenceNum} isDragDisabled={true}>
+                                                        {
+                                                            (provided, snapshot) => (
+                                                                <ListItem ref={provided.innerRef} key={player.licenceNum}
+                                                                        {...provided.draggableProps}
+                                                                        {...provided.dragHandleProps}
+                                                                            style={
+                                                                                    provided.draggableProps.style
+                                                                                }>
+                                                                    <Chip color="primary" label={player.firstname + " " + player.lastname}/>
+                                                                </ListItem>                                                        
+                                                            )
+                                                        }
+                                                    </Draggable>
+                                                );
+                                            })
+                                        }
+                                        {provided.placeholder}
+                                    </List>)}
+                            </CardContent>
+                        </Card>
+                    )}
+                </Droppable>
             );
         }
     }
 
 }
+
+export default withStyles(styles)(Gameday);

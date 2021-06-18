@@ -11,6 +11,10 @@ import {
     Team
 } from "../components/Team";
 
+import {
+    DragDropContext
+} from 'react-beautiful-dnd'
+
 const axios = require('axios');
 
 export class Home extends React.Component
@@ -55,20 +59,22 @@ export class Home extends React.Component
                 return (
                     <Card>
                         <CardContent>
-                            <Grid container spacing={2} direction="column">
-                                {this.state.teams.map((team) => {
-                                    return(
-                                        <Grid item>
-                                            <Card>
-                                                <CardHeader title={"Equipe " + team.number} subheader={team.division.name}/>
-                                                <CardContent>
-                                                    <Team team={team} />
-                                                </CardContent>
-                                            </Card>
-                                        </Grid>
-                                    );
-                                })}
-                            </Grid>
+                            <DragDropContext onDragEnd={(param) => {}}>
+                                <Grid container spacing={2} direction="column">
+                                    {this.state.teams.map((team) => {
+                                        return(
+                                            <Grid item>
+                                                <Card>
+                                                    <CardHeader title={"Equipe " + team.number} subheader={team.division.name}/>
+                                                    <CardContent>
+                                                        <Team team={team} />
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
+                                        );
+                                    })}
+                                </Grid>
+                            </DragDropContext>
                         </CardContent>
                     </Card>
                 );

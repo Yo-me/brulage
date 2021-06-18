@@ -8,7 +8,7 @@ import {
     Container
 } from '@material-ui/core'
 
-import { Gameday } from "./Gameday"
+import Gameday from "./Gameday"
 
 const axios = require('axios');
 

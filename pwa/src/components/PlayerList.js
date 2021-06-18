@@ -71,8 +71,7 @@ const styles = theme => ({
     },
     listItemClone: {
         "& ~ li": {
-            //display: "none!important"
-            transform: "none!important"
+            transform: "none !important"
         }
     },
     searchBar: {
@@ -150,12 +149,13 @@ class PlayerList extends React.Component {
                                 <>
                                     <ListItem className={this.props.classes.listItem} ref={provided.innerRef} 
                                                 {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
                                                 style={
                                                         provided.draggableProps.style
-                                                    }
+                                                }
                                                 key={player.licenceNum}>
-                                        <Chip color="primary" label={player.firstname + " " + player.lastname}/>
+                                        <Chip {...provided.dragHandleProps} 
+                                              color={"primary"}
+                                              label={player.firstname + " " + player.lastname}/>
                                     </ListItem>
                                     {snapshot.isDragging && (
                                         <ListItem className={this.props.classes.listItemClone}>
